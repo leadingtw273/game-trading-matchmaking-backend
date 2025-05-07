@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ApiModule } from './modules/api/api.module';
+import { CommonModule } from './common/common.module';
+import { CoreModule } from './core/core.module';
 import { TransactionModule } from '@/modules/transaction/transaction.module';
 import { CommodityModule } from '@/modules/commodity/commodity.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -19,7 +20,8 @@ import { PosterModule } from './modules/poster/poster.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false, // 生產環境應設為 false
     }),
-    ApiModule,
+    CommonModule,
+    CoreModule,
     TransactionModule,
     CommodityModule,
     PosterModule,

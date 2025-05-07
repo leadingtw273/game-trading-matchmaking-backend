@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
-// import { CreatePosterDto } from './dto/create-poster.dto';
-// import { UpdatePosterDto } from './dto/update-poster.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PosterView } from './entities/poster-view.entity';
+import { Repository } from 'typeorm';
+import {
+  IPaginationOptions,
+  PaginationService,
+} from '@/common/services/pagination.service';
+
+export interface IFindAllOptions extends IPaginationOptions {
+  nickname?: string;
+  gameId?: string;
+}
 
 @Injectable()
 export class PosterService {
-  // create(createPosterDto: CreatePosterDto) {
-  //   return 'This action adds a new poster';
-  // }
+  constructor(
+    @InjectRepository(PosterView)
+    private posterViewRepository: Repository<PosterView>,
+    private paginationService: PaginationService,
+  ) {}
 
-  findAll() {
-    return `This action returns all poster`;
+  findAll(options: IFindAllOptions) {
+    return this.paginationService.paginate(
+      this.posterViewRepository,
+      options,
+      (qb) => {
+        if (options.nickname) {
+          qb.andWhere('nickname like :nickname', {
+            nickname: `%${options.nickname}%`,
+          });
+        }
+
+        if (options.gameId) {
+          qb.andWhere('game_id = :gameId', {
+            gameId: options.gameId,
+          });
+        }
+        return qb;
+      },
+    );
   }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} poster`;
-  // }
-
-  // update(id: number, updatePosterDto: UpdatePosterDto) {
-  //   return `This action updates a #${id} poster`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} poster`;
-  // }
 }

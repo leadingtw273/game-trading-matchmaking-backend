@@ -7,8 +7,11 @@ import {
   // Param,
   Delete,
   MethodNotAllowedException,
+  Query,
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { PageDto, PageOptionsDto } from '@/common/dto/pagination.dto';
 
 // import { CreateTransactionDto } from './dto/create-transaction.dto';
 // import { UpdateTransactionDto } from './dto/update-transaction.dto';
@@ -23,8 +26,14 @@ export class TransactionController {
   // }
 
   @Get()
-  findAll() {
-    return this.transactionService.findAll();
+  @ApiOperation({ summary: '取得角色商品列表' })
+  @ApiResponse({
+    status: 200,
+    description: '成功取得角色商品列表',
+    type: PageDto,
+  })
+  findAll(@Query() pageOptionsDto: PageOptionsDto) {
+    return this.transactionService.findAll(pageOptionsDto);
   }
 
   @Post()

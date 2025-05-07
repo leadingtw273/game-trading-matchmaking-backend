@@ -1,8 +1,8 @@
 /**
- * API 基礎錯誤碼
+ * Response 業務回應代碼
  * 範圍：0-999
  */
-export enum ApiCode {
+export enum ResponseCode {
   // 成功相關 (0-99)
   SUCCESS = 1, // 操作成功
 
